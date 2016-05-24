@@ -1,4 +1,6 @@
 <?php
+use Cake\Core\Configure;
+
 /**
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -12,46 +14,84 @@
  * @since         0.10.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-
-$cakeDescription = 'CakePHP: the rapid development php framework';
 ?>
 <!DOCTYPE html>
 <html>
-<head>
-    <?= $this->Html->charset() ?>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>
-        <?= $cakeDescription ?>:
+  <head>
+      <?= $this->Html->charset() ?>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>
         <?= $this->fetch('title') ?>
-    </title>
-    <?= $this->Html->meta('icon') ?>
+      </title>
 
-    <?= $this->Html->css('base.css') ?>
-    <?= $this->Html->css('cake.css') ?>
+      <?= $this->Html->meta('icon') ?>
 
-    <?= $this->fetch('meta') ?>
-    <?= $this->fetch('css') ?>
-    <?= $this->fetch('script') ?>
-</head>
-<body>
-    <nav class="top-bar expanded" data-topbar role="navigation">
-        <ul class="title-area large-3 medium-4 columns">
-            <li class="name">
-                <h1><a href=""><?= $this->fetch('title') ?></a></h1>
-            </li>
-        </ul>
-        <div class="top-bar-section">
-            <ul class="right">
-                <li><a target="_blank" href="http://book.cakephp.org/3.0/">Documentation</a></li>
-                <li><a target="_blank" href="http://api.cakephp.org/3.0/">API</a></li>
-            </ul>
-        </div>
-    </nav>
-    <?= $this->Flash->render() ?>
-    <div class="container clearfix">
-        <?= $this->fetch('content') ?>
+      <?= $this->Html->css('bootstrap.css') ?>
+      <?= $this->Html->css('bootstrap-theme.css') ?>
+      <?= $this->Html->css('base.css') ?>
+
+      <?= $this->Html->script('jquery-2.2.4.js') ?>
+      <?= $this->Html->script('bootstrap.js') ?>
+      <?= $this->Html->script('knockout-3.4.0.js') ?>
+
+      <?= $this->fetch('meta') ?>
+      <?= $this->fetch('css') ?>
+      <?= $this->fetch('script') ?>
+  </head>
+  <body>
+    <div class="container">
+      <?php if ($authUser) { ?>
+        <nav class="navbar navbar-default" role="navigation">
+          <div class="container-fluid">
+            <div class="navbar-header">
+              <a class="navbar-brand" href="<?= $this->Url->build('/') ?>">
+                <?= $this->Html->image('bread.png', ['alt' => 'Orders']); ?>
+              </a>
+            </div>
+
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+              <ul class="nav navbar-nav">
+                <li class="active">
+                  <a href="#">Orders</a>
+                </li>
+              </ul>
+
+              <ul class="nav navbar-nav navbar-right">
+                <li>
+                  <a href="<?= $this->Url->build(['controller' => 'Users', 'action' => 'logout']) ?>">Logout</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+      <?php } ?>
+
+      <h1><a href=""><?= $this->fetch('title') ?></a></h1>
+
+      <?= $this->Flash->render() ?>
+
+      <div class="container clearfix">
+          <?= $this->fetch('content') ?>
+      </div>
     </div>
-    <footer>
+
+    <?= $this->fetch('scriptBottom') ?>
+
+    <footer style="border-top: 1px solid silver; text-align: center; font-size: 8pt; margin-top: 50px; padding-top: 10px;">
+      <div>
+        <span class="glyphicon glyphicon-chevron-left"></span>
+        <span class="glyphicon glyphicon-chevron-right"></span>
+        with
+        <span class="glyphicon glyphicon glyphicon-heart"></span>
+        in
+        <?= $this->Html->link($this->Html->image("atomic-structure.png", ["alt" => "Atom"]), "https://atom.io/", ['escape' => false]) ?>
+        by
+        <?= $this->Html->link($this->Html->image("yrs.png", ["alt" => "yaras"]), "http://yaras.pl/", ['escape' => false]) ?>
+
+        (v<?= Configure::read('version') ?>)
+      </div>
+
+      <div>Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
     </footer>
-</body>
+  </body>
 </html>

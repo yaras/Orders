@@ -1,5 +1,9 @@
 <IfModule mod_rewrite.c>
     RewriteEngine on
+
+    RewriteCond %{HTTPS} off
+    RewriteRule (.*) https://%{SERVER_NAME}/orders/$1 [R,L]
+
     RewriteRule    ^$    webroot/    [L]
     RewriteRule    (.*) webroot/$1    [L]
 </IfModule>
