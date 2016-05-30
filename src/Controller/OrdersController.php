@@ -187,6 +187,13 @@ class OrdersController extends AppController
 
       $result = $this->Orders->save($order);
 
+      $this->sendNotifications(
+        $id,
+        'Order archived',
+        sprintf('Order "%s" is archived', $order['title']),
+        true,
+        false);
+
       $this->set('status', 'success');
       $this->set('result', $result);
     }
