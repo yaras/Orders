@@ -63,9 +63,7 @@ function OrderViewModel() {
   };
 
   self.addPosition = function() {
-    orderPositionViewModel.orderViewModel = self;
-
-    orderPositionViewModel.openDialog('Create a position', function(position) {
+    orderPositionViewModel.openDialog(self, 'Create a position', function(position) {
       self.isLoading(true);
 
       data = {
