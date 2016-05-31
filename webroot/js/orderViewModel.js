@@ -125,9 +125,10 @@ function OrderViewModel() {
   self.loadMessages = function() {
     self.isLoadingMessages = true;
     self.refreshIsLoading();
-    self.messages.removeAll();
 
     $.getJSON(self.messagesUrl + 'all/' + self.id, function(data) {
+      self.messages.removeAll();
+
       $.each(data.messages, function(key, value) {
         var msg = new MessageViewModel();
         msg.deserialize(value);
@@ -142,9 +143,10 @@ function OrderViewModel() {
   self.loadPositions = function() {
     self.isLoadingPositions = true;
     self.refreshIsLoading();
-    self.positions.removeAll();
 
     $.getJSON(self.positionsUrl + 'all/' + self.id, function(data) {
+        self.positions.removeAll();
+
         $.each(data.positions, function(key, value) {
           var p = new PositionViewModel(self);
           p.deserialize(value);
