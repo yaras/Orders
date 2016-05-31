@@ -36,7 +36,10 @@
           <span>Status: <span style="font-weight: bold" data-bind="text: status"></span> </span>
           <br />
 
-          <span style="float: left; margin-right: 10px;">Cost: <span style="font-weight: bold" data-bind="text: cost"></span> zł </span>
+          <span style="float: left; margin-right: 10px;">
+            Cost: <span style="font-weight: bold" data-bind="text: cost"></span> zł
+            (current: <span style="font-weight: bold" data-bind="text: paid"></span> zł)
+          </span>
 
           <div class="progress">
             <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" data-bind="attr: { title: progress() + '%' }, style: { width: progress() + '%' }">

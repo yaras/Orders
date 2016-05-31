@@ -11,7 +11,8 @@ function OrderViewModel() {
   self.title = ko.observable('');
   self.description = ko.observable('');
   self.time = ko.observable('');
-  self.progress = ko.observable('');
+  self.progress = ko.observable(0);
+  self.paid = ko.observable(0);
   self.cost = ko.observable(0);
   self.created = ko.observable('');
   self.status = ko.observable('');
@@ -51,7 +52,8 @@ function OrderViewModel() {
     self.time(entity.order_time);
     self.author(entity.Author.name);
     self.cost(entity.cost);
-    self.progress(Math.round(entity.paid));
+    self.paid(Math.round(entity.paid));
+    self.progress(Math.round(entity.progress));
 
     if (entity.created) {
       self.created(entity.created.substr(0, 16).replace('T', ' '));
