@@ -11,8 +11,9 @@ function OrderViewModel() {
   self.title = ko.observable('');
   self.description = ko.observable('');
   self.time = ko.observable('');
-  self.progress = ko.observable('');
-  self.cost = ko.observable('');
+  self.progress = ko.observable(0);
+  self.paid = ko.observable(0);
+  self.cost = ko.observable(0);
   self.created = ko.observable('');
   self.status = ko.observable('');
   self.author = ko.observable('');
@@ -51,7 +52,8 @@ function OrderViewModel() {
     self.time(entity.order_time);
     self.author(entity.Author.name);
     self.cost(entity.cost);
-    self.progress(Math.round(entity.paid));
+    self.paid(Math.round(entity.paid));
+    self.progress(Math.round(entity.progress));
 
     if (entity.created) {
       self.created(entity.created.substr(0, 16).replace('T', ' '));
@@ -63,9 +65,7 @@ function OrderViewModel() {
   };
 
   self.addPosition = function() {
-    orderPositionViewModel.orderViewModel = self;
-
-    orderPositionViewModel.openDialog('Create a position', function(position) {
+    orderPositionViewModel.openDialog(self, 'Create a position', function(position) {
       self.isLoading(true);
 
       data = {
@@ -125,9 +125,10 @@ function OrderViewModel() {
   self.loadMessages = function() {
     self.isLoadingMessages = true;
     self.refreshIsLoading();
-    self.messages.removeAll();
 
     $.getJSON(self.messagesUrl + 'all/' + self.id, function(data) {
+      self.messages.removeAll();
+
       $.each(data.messages, function(key, value) {
         var msg = new MessageViewModel();
         msg.deserialize(value);
@@ -142,9 +143,10 @@ function OrderViewModel() {
   self.loadPositions = function() {
     self.isLoadingPositions = true;
     self.refreshIsLoading();
-    self.positions.removeAll();
 
     $.getJSON(self.positionsUrl + 'all/' + self.id, function(data) {
+        self.positions.removeAll();
+
         $.each(data.positions, function(key, value) {
           var p = new PositionViewModel(self);
           p.deserialize(value);

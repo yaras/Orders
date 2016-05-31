@@ -10,11 +10,13 @@ var notifications = new function() {
   };
 
   self.tick = function() {
-    console.log('start notifications...');
-
     $.getJSON(self.url + 'all', function(data) {
       var reloadAll = false;
       var ordersToReload = [];
+
+      if (data.notifications.length > 0) {
+        console.log('Received notifications: ' + data.notifications.length);
+      }
 
       $.each(data.notifications, function(key, value) {
         if (value.reload_orders == 1) {
@@ -27,7 +29,7 @@ var notifications = new function() {
           }
         }
 
-        self.showNotification(value.title, value.message);
+        self.showNotification(value.id, value.title, value.message);
       });
 
       if (reloadAll) {
@@ -53,7 +55,9 @@ var notifications = new function() {
     });
   };
 
-  self.showNotification = function(title, body) {
+  self.showNotification = function(id, title, body) {
+    console.log('Show notification: #' + id + ' <' + title + '> ' + '(' + body + ')');
+
     Notification.requestPermission(function() {
 
       options = {

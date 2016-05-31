@@ -48,10 +48,12 @@ class OrdersController extends AppController
 
       if (array_key_exists($o['id'], $paid))
       {
-        $o['paid'] = 100 * $paid[$o['id']] / $sums[$o['id']];
+        $o['paid'] = $paid[$o['id']];
+        $o['progress'] = 100 * $paid[$o['id']] / $sums[$o['id']];
       }
       else {
         $o['paid'] = 0;
+        $o['progress'] = 0;
       }
     }
 
@@ -81,10 +83,12 @@ class OrdersController extends AppController
 
     if (array_key_exists($id, $paid))
     {
-      $order['paid'] = 100 * $paid[$id] / $sums[$id];
+      $order['paid'] = $paid[$id];
+      $order['progress'] = 100 * $paid[$id] / $sums[$id];
     }
     else {
       $order['paid'] = 0;
+      $order['progress'] = 0;
     }
 
     $this->set('order', $order);
@@ -118,7 +122,7 @@ class OrdersController extends AppController
       );
 
       if ($result) {
-        $data = array_merge($data, [ 'id' => $result->id, 'Author' => ['name' => $this->Auth->user()['name'] ] ]);
+        $data = array_merge($data, [ 'id' => $result->id, 'Author' => ['name' => $this->Auth->user()['name'] ], 'cost' => 0 ]);
 
         $this->set('status', 'success');
         $this->set('data', $data);
@@ -186,6 +190,13 @@ class OrdersController extends AppController
       $this->Orders->patchEntity($order, ['archived' => 1]);
 
       $result = $this->Orders->save($order);
+
+      $this->sendNotifications(
+        $id,
+        'Order archived',
+        sprintf('Order "%s" is archived', $order['title']),
+        true,
+        false);
 
       $this->set('status', 'success');
       $this->set('result', $result);

@@ -22,6 +22,8 @@ use Cake\Log\Log;
 use Cake\Auth\DefaultPasswordHasher;
 use Cake\Utility\Security;
 
+define("APP_VERSION", "0.2.0");
+
 /**
  * Application Controller
  *
@@ -105,6 +107,7 @@ class AppController extends Controller
 
   public function beforeRender(Event $event)
   {
+    $this->set('version', APP_VERSION);
     $this->set('authUser', $this->Auth->user());
 
     if (!array_key_exists('_serialize', $this->viewVars) && in_array($this->response->type(), ['application/json', 'application/xml']))
@@ -169,9 +172,7 @@ class AppController extends Controller
         'title' => $title,
         'message' => $message,
         'reload_orders' => $reloadOrders ? 1 : 0,
-        'reload_order' => $reloadOrder ? 1 : 0,
-        'reload_positions' => $reloadPositions ? 1 : 0,
-        'reload_messages' => $reloadMessages ? 1 : 0
+        'reload_order' => $reloadOrder ? 1 : 0
       ]);
 
       $notifications->save($not);

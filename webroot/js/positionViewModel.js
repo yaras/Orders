@@ -53,7 +53,7 @@ function PositionViewModel(orderViewModel) {
   };
 
   self.edit = function() {
-    orderPositionViewModel.openEditDialog('Edit position', self, function(position) {
+    orderPositionViewModel.openEditDialog(self.orderViewModel, 'Edit position', self, function(position) {
       self.orderViewModel.isLoading(true);
 
       data = {

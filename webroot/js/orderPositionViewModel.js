@@ -11,8 +11,9 @@ function OrderPositionViewModel() {
   self.costError = ko.observable(false);
   self.costErrorMessage = ko.observable('');
 
-  self.openDialog = function(dialogTitle, onSave) {
+  self.openDialog = function(orderViewModel, dialogTitle, onSave) {
     self.dialogTitle(dialogTitle);
+    self.orderViewModel = orderViewModel;
     self.onSave = onSave;
 
     self.meal('');
@@ -41,8 +42,9 @@ function OrderPositionViewModel() {
     return !self.mealError() && !self.costError();
   }
 
-  self.openEditDialog = function(dialogTitle, position, onSave) {
+  self.openEditDialog = function(orderViewModel, dialogTitle, position, onSave) {
     self.dialogTitle(dialogTitle);
+    self.orderViewModel = orderViewModel;
     self.onSave = onSave;
 
     self.meal(position.meal());
@@ -59,7 +61,7 @@ function OrderPositionViewModel() {
     if (self.verifyValues()) {
       self.closeDialog();
 
-      var positionViewModel = new PositionViewModel();
+      var positionViewModel = new PositionViewModel(self.orderViewModel);
 
       positionViewModel.deserialize({
         'meal': self.meal(),
