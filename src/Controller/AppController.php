@@ -172,9 +172,7 @@ class AppController extends Controller
         'title' => $title,
         'message' => $message,
         'reload_orders' => $reloadOrders ? 1 : 0,
-        'reload_order' => $reloadOrder ? 1 : 0,
-        'reload_positions' => $reloadPositions ? 1 : 0,
-        'reload_messages' => $reloadMessages ? 1 : 0
+        'reload_order' => $reloadOrder ? 1 : 0
       ]);
 
       $notifications->save($not);
