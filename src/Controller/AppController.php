@@ -22,6 +22,8 @@ use Cake\Log\Log;
 use Cake\Auth\DefaultPasswordHasher;
 use Cake\Utility\Security;
 
+define("APP_VERSION", "0.1.0");
+
 /**
  * Application Controller
  *
@@ -105,6 +107,7 @@ class AppController extends Controller
 
   public function beforeRender(Event $event)
   {
+    $this->set('version', APP_VERSION);
     $this->set('authUser', $this->Auth->user());
 
     if (!array_key_exists('_serialize', $this->viewVars) && in_array($this->response->type(), ['application/json', 'application/xml']))
