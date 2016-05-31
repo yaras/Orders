@@ -12,7 +12,7 @@ function OrderViewModel() {
   self.description = ko.observable('');
   self.time = ko.observable('');
   self.progress = ko.observable('');
-  self.cost = ko.observable('');
+  self.cost = ko.observable(0);
   self.created = ko.observable('');
   self.status = ko.observable('');
   self.author = ko.observable('');

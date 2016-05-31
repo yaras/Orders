@@ -118,7 +118,7 @@ class OrdersController extends AppController
       );
 
       if ($result) {
-        $data = array_merge($data, [ 'id' => $result->id, 'Author' => ['name' => $this->Auth->user()['name'] ] ]);
+        $data = array_merge($data, [ 'id' => $result->id, 'Author' => ['name' => $this->Auth->user()['name'] ], 'cost' => 0 ]);
 
         $this->set('status', 'success');
         $this->set('data', $data);
