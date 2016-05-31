@@ -19,8 +19,10 @@
         </div>
 
         <div class="form-group">
-          <span>Description: <span style="font-weight: bold" data-bind="text: description"></span> </span>
-          <br />
+          <span data-bind="visible: description().length > 0">
+            <span>Description: <span style="font-weight: bold" data-bind="text: description"></span> </span>
+            <br />
+          </span>
 
           <span>Created: <span style="font-weight: bold" data-bind="text: created"></span> </span>
           <br />
