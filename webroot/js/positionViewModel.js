@@ -10,12 +10,32 @@ function PositionViewModel(orderViewModel) {
   self.cost = ko.observable('');
   self.paid = ko.observable(false);
 
-  self.canEdit = ko.computed(function() {
-    return self.orderViewModel != null ? (self.orderViewModel.status() == 'New') : false;
+  self.permission = ko.observable(true);
+
+  self.canSetPaid = ko.computed(function() {
+    //// only owner can set paid
+    return self.orderViewModel != null && self.orderViewModel.permission();
   }, this);
 
   self.canDelete = ko.computed(function() {
-    return self.orderViewModel != null ? (self.orderViewModel.status() == 'New') : false;
+    return self.orderViewModel != null
+      && (self.orderViewModel.permission() || self.permission());
+  }, this);
+
+  self.canEdit = ko.computed(function() {
+    if (self.orderViewModel == null) {
+      return false;
+    }
+
+    return self.orderViewModel.status() == 'New' && (self.orderViewModel.permission() || self.permission());
+  }, this);
+
+  self.canDelete = ko.computed(function() {
+    if (self.orderViewModel == null) {
+      return false;
+    }
+
+    return self.orderViewModel.status() == 'New' && (self.orderViewModel.permission() || self.permission());
   }, this);
 
   self.deserialize = function(data) {
@@ -24,6 +44,7 @@ function PositionViewModel(orderViewModel) {
     self.username(data.Author ? data.Author.name : '');
     self.cost(data.cost);
     self.paid(data.paid ? (data.paid == '1') : false);
+    self.permission(data.permission);
   };
 
   self.setPaid = function() {
@@ -61,16 +82,12 @@ function PositionViewModel(orderViewModel) {
         'cost': position.cost()
       };
 
-      $.post(self.url + 'edit/' + self.id, data, function(result){
-
-        if (result.status == 'success') {
-          self.meal(position.meal());
-          self.cost(position.cost());
-        } else {
+      $.post(self.url + 'edit/' + self.id, data, function(result) {
+        if (result.status != 'success') {
           alert('Error updating position');
         }
 
-        self.orderViewModel.isLoading(false);
+        self.orderViewModel.reload();
       }, 'json');
     });
   };
@@ -80,14 +97,11 @@ function PositionViewModel(orderViewModel) {
       self.orderViewModel.isLoading(true);
 
       $.post(self.url + 'delete/' + self.id, function(result) {
-
-        if (result.status == 'success') {
-          self.orderViewModel.positions.remove(self);
-        } else {
+        if (result.status != 'success') {
           alert('Error deleting position');
         }
 
-        self.orderViewModel.isLoading(false);
+        self.orderViewModel.reload();
       }, 'json');
     });
   }

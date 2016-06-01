@@ -36,6 +36,8 @@ class OrdersController extends AppController
     $sums = $this->getCost(NULL);
     $paid = $this->getPaid(NULL);
 
+    $currentUserId = $this->Auth->user()['id'];
+
     foreach($ordersArray as $o) {
       if (array_key_exists($o['id'], $sums))
       {
@@ -55,6 +57,8 @@ class OrdersController extends AppController
         $o['paid'] = 0;
         $o['progress'] = 0;
       }
+
+      $o['permission'] = $o['author_user_id'] == $currentUserId;
     }
 
     $this->set('orders', $ordersArray);
@@ -91,6 +95,8 @@ class OrdersController extends AppController
       $order['progress'] = 0;
     }
 
+    $order['permission'] = $order['author_user_id'] == $this->Auth->user()['id'];
+
     $this->set('order', $order);
     $this->set('_serialize', ['order']);
   }
@@ -122,7 +128,13 @@ class OrdersController extends AppController
       );
 
       if ($result) {
-        $data = array_merge($data, [ 'id' => $result->id, 'Author' => ['name' => $this->Auth->user()['name'] ], 'cost' => 0 ]);
+        $data = array_merge($data, [
+          'id' => $result->id,
+          'Author' => ['name' => $this->Auth->user()['name'] ],
+          'cost' => 0,
+          'paid' => 0,
+          'permission' => true
+        ]);
 
         $this->set('status', 'success');
         $this->set('data', $data);

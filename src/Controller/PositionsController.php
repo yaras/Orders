@@ -27,6 +27,13 @@ class PositionsController extends AppController
       }]
     ]);
 
+    $currentUserId = $this->Auth->user()['id'];
+
+    foreach ($positions as $p)
+    {
+      $p['permission'] = $p['user_id'] == $currentUserId;
+    }
+
     $this->set('positions', $positions);
     $this->set('_serialize', ['positions']);
   }
@@ -101,7 +108,10 @@ class PositionsController extends AppController
   public function setStatus($id) {
     if ($this->request->is('post'))
     {
-      $position = $this->Positions->get($id);
+      $position = $this->Positions->get($id, [
+        'contain' => ['Users' => function($q) {
+          return $q->select(['name']);
+      }]]);
 
       $this->Positions->patchEntity($position, $this->request->data(), [
         'fieldList' => ['paid']
@@ -111,7 +121,12 @@ class PositionsController extends AppController
 
       $this->sendNotifications($position['order_id'],
         'Changed position paid status',
-        sprintf('"%s" changed status of "%s" to "%s"', $this->Auth->user()['name'], $position['meal'], $position['paid'] == 1 ? 'paid' : 'not paid'),
+        sprintf(
+          '"%s" changed status of "%s" (%s) to "%s"',
+          $this->Auth->user()['name'],
+          $position['meal'],
+          $position['Author']['name'],
+          $position['paid'] == 1 ? 'paid' : 'not paid'),
         false,
         true);
 
@@ -130,13 +145,30 @@ class PositionsController extends AppController
   {
     if ($this->request->is('post'))
     {
-      $position = $this->Positions->get($id);
+      $position = $this->Positions->get($id, [
+        'contain' => ['Users' => function($q) {
+          return $q->select(['name']);
+      }]]);
 
       $this->Positions->patchEntity($position, $this->request->data, [
         'fieldList' => ['meal', 'cost']
       ]);
 
       $result = $this->Positions->save($position);
+
+      $orders = TableRegistry::get('Orders');
+      $order = $orders->get($position['order_id']);
+
+      $this->sendNotifications(
+        $position['order_id'],
+        'Changed position',
+        sprintf('"%s" changed position "%s" ("%s") on "%s"',
+          $this->Auth->user()['name'],
+          $position['meal'],
+          $position['Author']['name'],
+          $order['title']),
+        false,
+        true);
 
       if ($result)
       {

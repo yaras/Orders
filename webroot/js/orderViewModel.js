@@ -17,29 +17,38 @@ function OrderViewModel() {
   self.created = ko.observable('');
   self.status = ko.observable('');
   self.author = ko.observable('');
+  self.permission = ko.observable(false);
 
   self.canAddPosition = ko.computed(function() {
     return self.status() == 'New';
   }, this);
 
   self.canSetNew = ko.computed(function() {
-    return self.status() != 'New';
+    return self.permission() && self.status() != 'New';
   }, this);
 
   self.canSetLocked = ko.computed(function() {
-    return self.status() != 'Locked';
+    return self.permission() && self.status() != 'Locked';
   }, this);
 
   self.canSetPending = ko.computed(function() {
-    return self.status() != 'Pending';
+    return self.permission() && self.status() != 'Pending';
   }, this);
 
   self.canSetDelivered = ko.computed(function() {
-    return self.status() != 'Delivered';
+    return self.permission() && self.status() != 'Delivered';
   }, this);
 
   self.canSetArchived = ko.computed(function() {
-    return self.status() == 'Delivered';
+    return self.permission() && self.status() == 'Delivered';
+  }, this);
+
+  self.canEdit = ko.computed(function() {
+    return self.permission();
+  }, this);
+
+  self.canDelete = ko.computed(function() {
+    return self.permission();
   }, this);
 
   self.positions = ko.observableArray();
@@ -54,6 +63,7 @@ function OrderViewModel() {
     self.cost(entity.cost);
     self.paid(Math.round(entity.paid));
     self.progress(Math.round(entity.progress));
+    self.permission(entity.permission);
 
     if (entity.created) {
       self.created(entity.created.substr(0, 16).replace('T', ' '));
@@ -75,18 +85,11 @@ function OrderViewModel() {
       };
 
       $.post(self.positionsUrl + 'add', data, function(result) {
-        if (result.status == 'success') {
-
-          position.id = result.data.id;
-          position.username(result.data.User.name);
-          position.orderViewModel = self;
-
-          self.positions.push(position);
-        } else {
+        if (result.status != 'success') {
           alert('Error saving position')
         }
 
-        self.isLoading(false);
+        self.reload();
       }, 'json');
     });
   };
