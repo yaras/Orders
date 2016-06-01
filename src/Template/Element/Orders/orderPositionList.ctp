@@ -26,10 +26,10 @@
         </span>
       </td>
       <td>
-        <button type="button" class="btn btn-primary btn-xs" data-bind="click: edit, enable: canEdit">Edit</button>
+        <button type="button" class="btn btn-primary btn-xs" data-bind="click: edit, visible: canEdit">Edit</button>
       </td>
       <td>
-        <button type="button" class="btn btn-danger btn-xs" data-bind="click: deletePosition, enable: canDelete">Delete</button>
+        <button type="button" class="btn btn-danger btn-xs" data-bind="click: deletePosition, visible: canDelete">Delete</button>
       </td>
     </tr>
   </tbody>
