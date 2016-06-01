@@ -27,6 +27,13 @@ class PositionsController extends AppController
       }]
     ]);
 
+    $currentUserId = $this->Auth->user()['id'];
+
+    foreach ($positions as $p)
+    {
+      $p['permission'] = $p['user_id'] == $currentUserId;
+    }
+
     $this->set('positions', $positions);
     $this->set('_serialize', ['positions']);
   }

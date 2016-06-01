@@ -22,7 +22,7 @@
   <span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span> Set delivered
 </button>
 
-<button type="button" class="btn btn-warning btn-sm" data-bind="click: edit">
+<button type="button" class="btn btn-warning btn-sm" data-bind="click: edit, enable: canEdit">
   <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Edit
 </button>
 
@@ -30,6 +30,6 @@
   <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> Archive
 </button>
 
-<button type="button" class="btn btn-danger btn-sm" data-bind="click: deleteOrder">
+<button type="button" class="btn btn-danger btn-sm" data-bind="click: deleteOrder, enable: canDelete">
   <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Delete
 </button>
