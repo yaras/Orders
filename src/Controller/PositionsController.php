@@ -137,13 +137,30 @@ class PositionsController extends AppController
   {
     if ($this->request->is('post'))
     {
-      $position = $this->Positions->get($id);
+      $position = $this->Positions->get($id, [
+        'contain' => ['Users' => function($q) {
+          return $q->select(['name']);
+      }]]);
 
       $this->Positions->patchEntity($position, $this->request->data, [
         'fieldList' => ['meal', 'cost']
       ]);
 
       $result = $this->Positions->save($position);
+
+      $orders = TableRegistry::get('Orders');
+      $order = $orders->get($position['order_id']);
+
+      $this->sendNotifications(
+        $position['order_id'],
+        'Changed position',
+        sprintf('"%s" changed position "%s" ("%s") on "%s"',
+          $this->Auth->user()['name'],
+          $position['meal'],
+          $position['Author']['name'],
+          $order['title']),
+        false,
+        true);
 
       if ($result)
       {
