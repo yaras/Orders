@@ -82,16 +82,12 @@ function PositionViewModel(orderViewModel) {
         'cost': position.cost()
       };
 
-      $.post(self.url + 'edit/' + self.id, data, function(result){
-
-        if (result.status == 'success') {
-          self.meal(position.meal());
-          self.cost(position.cost());
-        } else {
+      $.post(self.url + 'edit/' + self.id, data, function(result) {
+        if (result.status != 'success') {
           alert('Error updating position');
         }
 
-        self.orderViewModel.isLoading(false);
+        self.orderViewModel.reload();
       }, 'json');
     });
   };
@@ -101,14 +97,11 @@ function PositionViewModel(orderViewModel) {
       self.orderViewModel.isLoading(true);
 
       $.post(self.url + 'delete/' + self.id, function(result) {
-
-        if (result.status == 'success') {
-          self.orderViewModel.positions.remove(self);
-        } else {
+        if (result.status != 'success') {
           alert('Error deleting position');
         }
 
-        self.orderViewModel.isLoading(false);
+        self.orderViewModel.reload();
       }, 'json');
     });
   }

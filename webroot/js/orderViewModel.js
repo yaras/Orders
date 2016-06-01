@@ -85,18 +85,11 @@ function OrderViewModel() {
       };
 
       $.post(self.positionsUrl + 'add', data, function(result) {
-        if (result.status == 'success') {
-
-          position.id = result.data.id;
-          position.username(result.data.User.name);
-          position.orderViewModel = self;
-
-          self.positions.push(position);
-        } else {
+        if (result.status != 'success') {
           alert('Error saving position')
         }
 
-        self.isLoading(false);
+        self.reload();
       }, 'json');
     });
   };
