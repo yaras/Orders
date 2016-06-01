@@ -108,7 +108,10 @@ class PositionsController extends AppController
   public function setStatus($id) {
     if ($this->request->is('post'))
     {
-      $position = $this->Positions->get($id);
+      $position = $this->Positions->get($id, [
+        'contain' => ['Users' => function($q) {
+          return $q->select(['name']);
+      }]]);
 
       $this->Positions->patchEntity($position, $this->request->data(), [
         'fieldList' => ['paid']
@@ -118,7 +121,12 @@ class PositionsController extends AppController
 
       $this->sendNotifications($position['order_id'],
         'Changed position paid status',
-        sprintf('"%s" changed status of "%s" to "%s"', $this->Auth->user()['name'], $position['meal'], $position['paid'] == 1 ? 'paid' : 'not paid'),
+        sprintf(
+          '"%s" changed status of "%s" (%s) to "%s"',
+          $this->Auth->user()['name'],
+          $position['meal'],
+          $position['Author']['name'],
+          $position['paid'] == 1 ? 'paid' : 'not paid'),
         false,
         true);
 
