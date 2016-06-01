@@ -18,6 +18,8 @@ var notifications = new function() {
         console.log('Received notifications: ' + data.notifications.length);
       }
 
+      var i = 1;
+
       $.each(data.notifications, function(key, value) {
         if (value.reload_orders == 1) {
             reloadAll = true;
@@ -29,7 +31,11 @@ var notifications = new function() {
           }
         }
 
-        self.showNotification(value.id, value.title, value.message);
+        setTimeout(function () {
+          self.showNotification(value.id, value.title, value.message);
+        }, i * 200);
+
+        i += 1;
       });
 
       if (reloadAll) {
@@ -56,18 +62,13 @@ var notifications = new function() {
   };
 
   self.showNotification = function(id, title, body) {
-    console.log('Show notification: #' + id + ' <' + title + '> ' + '(' + body + ')');
-
     Notification.requestPermission(function() {
+      console.log('Show notification: #' + id + ' <' + title + '> ' + '(' + body + ')');
 
-      options = {
+      var n = new Notification(title, {
          body: body,
          icon: '/orders/img/bread32.png'
-      }
-
-      setTimeout(function() {
-        var notification = new Notification(title, options);
-      }, 200);
+      });
    });
   }
 }
