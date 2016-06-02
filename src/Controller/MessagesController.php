@@ -52,12 +52,15 @@ class MessagesController extends AppController
 
       $orders = TableRegistry::get('Orders');
       $order = $orders->get($data['order_id']);
+
       $this->sendNotifications(
         $data['order_id'],
         'Added a message',
         sprintf('"%s" wrote "%s" on "%s"', $this->Auth->user()['name'], $data['message'], $order['title']),
         false,
         true);
+
+      $this->sendSilentNotificationsToAll($data['order_id']);
 
       if ($result) {
         $data = array_merge($data, [ 'id' => $result->id, 'Author' => [ 'name' => $this->Auth->user()['name'] ] ]);

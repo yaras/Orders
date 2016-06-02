@@ -124,7 +124,8 @@ class OrdersController extends AppController
       $this->sendNotificationsToAll(
         'Added new order',
         sprintf('"%s" added new order: "%s"', $this->Auth->user()['name'], $order['title']),
-        true
+        true,
+        false
       );
 
       if ($result) {
@@ -165,6 +166,8 @@ class OrdersController extends AppController
         false,
         true);
 
+      $this->sendSilentNotificationsToAll($id);
+
       $this->set('status', 'success');
       $this->set('result', $result);
     }
@@ -184,6 +187,8 @@ class OrdersController extends AppController
         sprintf('Order "%s" was deleted by "%s"', $order['title'], $this->Auth->user()['name']),
         true,
         false);
+
+      $this->sendSilentNotificationsToAll(null);
 
       $result = $this->Orders->delete($order);
 
@@ -210,6 +215,8 @@ class OrdersController extends AppController
         true,
         false);
 
+      $this->sendSilentNotificationsToAll(null);
+
       $this->set('status', 'success');
       $this->set('result', $result);
     }
@@ -235,6 +242,8 @@ class OrdersController extends AppController
         sprintf('Order "%s" changed status to %s', $order['title'], $order['status']),
         false,
         true);
+
+      $this->sendSilentNotificationsToAll($id);
 
       $this->set('status', 'success');
       $this->set('result', $result);

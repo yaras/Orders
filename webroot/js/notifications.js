@@ -31,11 +31,13 @@ var notifications = new function() {
           }
         }
 
-        setTimeout(function () {
-          self.showNotification(value.id, value.title, value.message);
-        }, i * 200);
+        if (!value.silent) {
+          setTimeout(function () {
+            self.showNotification(value.id, value.title, value.message);
+          }, i * 200);
 
-        i += 1;
+          i += 1;
+        }
       });
 
       if (reloadAll) {
