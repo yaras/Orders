@@ -22,7 +22,8 @@ function PositionViewModel(orderViewModel) {
       return false;
     }
 
-    return self.orderViewModel.status() == 'New' && (self.orderViewModel.permission() || self.permission());
+    return self.orderViewModel.status() == 'New'
+      && (self.orderViewModel.permission() || (self.permission() && !self.paid()));
   }, this);
 
   self.canDelete = ko.computed(function() {
@@ -30,7 +31,8 @@ function PositionViewModel(orderViewModel) {
       return false;
     }
 
-    return self.orderViewModel.status() == 'New' && (self.orderViewModel.permission() || self.permission());
+    return self.orderViewModel.status() == 'New'
+      && (self.orderViewModel.permission() || (self.permission() && !self.paid()));
   }, this);
 
   self.deserialize = function(data) {
