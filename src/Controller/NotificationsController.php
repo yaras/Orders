@@ -34,4 +34,21 @@ class NotificationsController extends AppController
     $this->set('notifications', $result);
     $this->set('_serialize', ['notifications']);
   }
+
+  public function dismiss()
+  {
+    if ($this->request->is('post'))
+    {
+      $this->Notifications->updateAll(
+        [ 'downloaded' => 1 ],
+        [ 'user_id' => $this->Auth->user()['id'] ]
+      );
+
+      $this->set('status', 'success');
+    } else {
+      $this->set('status', 'error');
+    }
+
+    $this->set('_serialize', ['status']);
+  }
 }

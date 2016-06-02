@@ -3,13 +3,28 @@ var notifications = new function() {
 
   self.url = '/orders/notifications/';
 
+  self.isAnyDialogOpen = function() {
+    return confirmDialogViewModel.isDialogOpen
+      || messageDialogViewModel.isDialogOpen
+      || orderDialogViewModel.isDialogOpen
+      || orderPositionViewModel.isDialogOpen;
+  };
+
   self.start = function() {
-    setInterval(function() {
-      self.tick();
-    }, 10000);
+
+    $.post(self.url + 'dismiss', function(data) {
+      setInterval(function() {
+        self.tick();
+      }, 10000);
+    }, 'json');
   };
 
   self.tick = function() {
+
+    if (self.isAnyDialogOpen()) {
+      return;
+    }
+
     $.getJSON(self.url + 'all', function(data) {
       var reloadAll = false;
       var ordersToReload = [];
@@ -31,11 +46,13 @@ var notifications = new function() {
           }
         }
 
-        setTimeout(function () {
-          self.showNotification(value.id, value.title, value.message);
-        }, i * 200);
+        if (!value.silent) {
+          setTimeout(function () {
+            self.showNotification(value.id, value.title, value.message);
+          }, i * 200);
 
-        i += 1;
+          i += 1;
+        }
       });
 
       if (reloadAll) {

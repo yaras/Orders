@@ -11,6 +11,16 @@ function OrderPositionViewModel() {
   self.costError = ko.observable(false);
   self.costErrorMessage = ko.observable('');
 
+  self.isDialogOpen = false;
+
+  $('#orderPositionDialog').on('show.bs.modal', function(e) {
+    self.isDialogOpen = true;
+  });
+
+  $('#orderPositionDialog').on('hide.bs.modal', function(e) {
+    self.isDialogOpen = false;
+  });
+
   self.openDialog = function(orderViewModel, dialogTitle, onSave) {
     self.dialogTitle(dialogTitle);
     self.orderViewModel = orderViewModel;

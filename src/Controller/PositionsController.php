@@ -58,12 +58,15 @@ class PositionsController extends AppController
 
       $orders = TableRegistry::get('Orders');
       $order = $orders->get($data['order_id']);
+
       $this->sendNotifications(
         $data['order_id'],
         'Added position',
         sprintf('"%s" added position "%s" to "%s"', $this->Auth->user()['name'], $data['meal'], $order['title']),
         false,
         true);
+
+      $this->sendSilentNotificationsToAll($data['order_id']);
 
       if ($result) {
         $data = array_merge($data, [ 'id' => $result->id, 'User' => [ 'name' => $this->Auth->user()['name'] ] ]);
@@ -94,6 +97,8 @@ class PositionsController extends AppController
         sprintf('"%s" deleted "%s" from "%s"', $this->Auth->user()['name'], $pos['meal'], $order['title']),
         false,
         true);
+
+      $this->sendSilentNotificationsToAll($pos['order_id']);
 
       if ($result) {
         $this->set('status', 'success');
@@ -129,6 +134,8 @@ class PositionsController extends AppController
           $position['paid'] == 1 ? 'paid' : 'not paid'),
         false,
         true);
+
+      $this->sendSilentNotificationsToAll($position['order_id']);
 
       if ($result)
       {
@@ -169,6 +176,8 @@ class PositionsController extends AppController
           $order['title']),
         false,
         true);
+
+      $this->sendSilentNotificationsToAll($position['order_id']);
 
       if ($result)
       {

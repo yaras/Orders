@@ -5,6 +5,15 @@ function MessageDialogViewModel() {
 
   self.messageError = ko.observable(false);
   self.messageErrorMessage = ko.observable('');
+  self.isDialogOpen = false;
+
+  $('#messageDialog').on('show.bs.modal', function(e) {
+    self.isDialogOpen = true;
+  });
+
+  $('#messageDialog').on('hide.bs.modal', function(e) {
+    self.isDialogOpen = false;
+  });
 
   self.openDialog = function(onSend) {
     self.message('');

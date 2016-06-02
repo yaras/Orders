@@ -12,6 +12,16 @@ function OrderDialogViewModel() {
   self.timeError = ko.observable(false);
   self.timeErrorMessage = ko.observable(false);
 
+  self.isDialogOpen = false;
+
+  $('#createOrderDialog').on('show.bs.modal', function(e) {
+    self.isDialogOpen = true;
+  });
+
+  $('#createOrderDialog').on('hide.bs.modal', function(e) {
+    self.isDialogOpen = false;
+  });
+
   self.openCreateDialog = function(dialogTitle, onSaveAction) {
     self.openEditDialog(dialogTitle, new OrderViewModel(), onSaveAction);
   };

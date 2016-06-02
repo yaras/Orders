@@ -22,7 +22,7 @@ use Cake\Log\Log;
 use Cake\Auth\DefaultPasswordHasher;
 use Cake\Utility\Security;
 
-define("APP_VERSION", "0.3.0");
+define("APP_VERSION", "0.4.0");
 
 /**
  * Application Controller
@@ -179,7 +179,7 @@ class AppController extends Controller
     }
   }
 
-  protected function sendNotificationsToAll($title, $message, $reloadOrders)
+  protected function sendNotificationsToAll($title, $message, $reloadOrders, $silent)
   {
     $this->clearOverdueNotifications();
 
@@ -202,8 +202,48 @@ class AppController extends Controller
         'title' => $title,
         'message' => $message,
         'reload_orders' => $reloadOrders ? 1 : 0,
-        'reload_order' => 0
+        'reload_order' => 0,
+        'silent' => $silent ? 1 : 0
       ]);
+
+      $notifications->save($not);
+    }
+  }
+
+  protected function sendSilentNotificationsToAll($orderId)
+  {
+    $this->clearOverdueNotifications();
+
+    $users = TableRegistry::get('Users');
+    $notifications = TableRegistry::get('Notifications');
+
+    $currentUserId = $this->Auth->user()['id'];
+
+    $query = $users->find('all');
+
+    foreach ($query as $user) {
+      if ($user['id'] == $currentUserId) {
+        continue;
+      }
+
+      $not = $notifications->newEntity();
+
+      if ($orderId == null) {
+        $notifications->patchEntity($not, [
+          'user_id' => $user['id'],
+          'reload_orders' => 1,
+          'reload_order' => 0,
+          'silent' => 1
+        ]);
+      } else {
+        $notifications->patchEntity($not, [
+          'user_id' => $user['id'],
+          'order_id' => $orderId,
+          'reload_orders' => 0,
+          'reload_order' => 1,
+          'silent' => 1
+        ]);
+      }
 
       $notifications->save($not);
     }
