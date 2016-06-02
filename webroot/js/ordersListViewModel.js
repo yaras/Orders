@@ -33,7 +33,7 @@ function OrdersListViewModel() {
 
   self.loadOrders = function() {
     self.isLoading(true);
-    console.log('start loading orders...');
+
     $.getJSON(self.url + 'all', function(data) {
       self.loadData(data);
       self.isLoading(false);
