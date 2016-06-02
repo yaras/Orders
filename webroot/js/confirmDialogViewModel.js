@@ -4,6 +4,15 @@ function ConfirmDialogViewModel() {
   self.dialogTitle = ko.observable();
   self.content = ko.observable();
   self.confirmText = ko.observable();
+  self.isDialogOpen = false;
+
+  $('#confirmDialog').on('show.bs.modal', function(e) {
+    self.isDialogOpen = true;
+  });
+
+  $('#confirmDialog').on('hide.bs.modal', function(e) {
+    self.isDialogOpen = false;
+  });
 
   self.openDialog = function(title, content, confirmText, confirmAction) {
     self.dialogTitle(title);

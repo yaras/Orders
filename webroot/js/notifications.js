@@ -3,6 +3,13 @@ var notifications = new function() {
 
   self.url = '/orders/notifications/';
 
+  self.isAnyDialogOpen = function() {
+    return confirmDialogViewModel.isDialogOpen
+      || messageDialogViewModel.isDialogOpen
+      || orderDialogViewModel.isDialogOpen
+      || orderPositionViewModel.isDialogOpen;
+  };
+
   self.start = function() {
 
     $.post(self.url + 'dismiss', function(data) {
@@ -13,6 +20,11 @@ var notifications = new function() {
   };
 
   self.tick = function() {
+
+    if (self.isAnyDialogOpen()) {
+      return;
+    }
+
     $.getJSON(self.url + 'all', function(data) {
       var reloadAll = false;
       var ordersToReload = [];
