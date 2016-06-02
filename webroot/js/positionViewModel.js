@@ -17,11 +17,6 @@ function PositionViewModel(orderViewModel) {
     return self.orderViewModel != null && self.orderViewModel.permission();
   }, this);
 
-  self.canDelete = ko.computed(function() {
-    return self.orderViewModel != null
-      && (self.orderViewModel.permission() || self.permission());
-  }, this);
-
   self.canEdit = ko.computed(function() {
     if (self.orderViewModel == null) {
       return false;
