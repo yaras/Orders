@@ -4,9 +4,12 @@ var notifications = new function() {
   self.url = '/orders/notifications/';
 
   self.start = function() {
-    setInterval(function() {
-      self.tick();
-    }, 10000);
+
+    $.post(self.url + 'dismiss', function(data) {
+      setInterval(function() {
+        self.tick();
+      }, 10000);
+    }, 'json');
   };
 
   self.tick = function() {
