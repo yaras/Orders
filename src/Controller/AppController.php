@@ -22,7 +22,7 @@ use Cake\Log\Log;
 use Cake\Auth\DefaultPasswordHasher;
 use Cake\Utility\Security;
 
-define("APP_VERSION", "0.4.0");
+define("APP_VERSION", "0.5.0");
 
 /**
  * Application Controller

@@ -40,7 +40,16 @@ function OrderDialogViewModel() {
       self.timeError(true);
       self.timeErrorMessage('Invalid time format, expectd: HH:MM');
     } else {
-      self.timeError(false);
+      var t = self.time();
+      var hours = t.substring(0, t.indexOf(':'));
+      var minutes = t.substring(t.indexOf(':') + 1);
+
+      if (hours < 0 || hours > 23 || minutes < 0 || minutes > 59) {
+        self.timeError(true);
+        self.timeErrorMessage('Invalid time format, expectd: HH:MM');
+      } else {
+        self.timeError(false);
+      }
     }
 
     return !self.titleError() && !self.timeError();
