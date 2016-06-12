@@ -21,7 +21,7 @@ class PositionsController extends AppController
   {
     $positions = $this->Positions->find('all', [
       'conditions' => [ 'order_id' => $id ],
-      'order' => 'Positions.id',
+      'order' => 'Positions.meal',
       'contain' => ['Users' => function($q) {
         return $q->select(['name']);
       }]
