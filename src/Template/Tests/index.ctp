@@ -22,5 +22,6 @@
     <script type="text/javascript" src="<?= $this->Url->script('tests/sinon-qunit-1.0.0.js') ?>"></script>
 
     <script type="text/javascript" src="<?= $this->Url->script('tests/orderPositionViewModelTests.js') ?>"></script>
+    <script type="text/javascript" src="<?= $this->Url->script('tests/orderDialogViewModelTests.js') ?>"></script>
   </body>
 </html>
