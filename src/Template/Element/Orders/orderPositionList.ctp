@@ -15,6 +15,9 @@
       <td data-bind="text: username"></td>
       <td style="text-align: right"><span data-bind="text: cost"></span> zł</td>
       <td>
+        <span data-bind="visible: !paid()" class="glyphicon glyphicon-remove" style="color: tomato" aria-hidden="true"></span>
+        <span data-bind="visible: paid" class="glyphicon glyphicon-ok" style="color: darkseagreen" aria-hidden="true"></span>
+
         <span data-bind="if: canSetPaid">
           <button type="button" class="btn btn-default btn-xs" data-bind="click: setPaid, visible: !paid()">Set paid</button>
           <button type="button" class="btn btn-default btn-xs" data-bind="click: setNotPaid, visible: paid">Set not paid</button>
