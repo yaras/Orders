@@ -61,8 +61,8 @@ function OrderViewModel() {
     self.time(entity.order_time);
     self.author(entity.Author.name);
     self.cost(entity.cost);
-    self.paid(Math.round(entity.paid));
-    self.progress(Math.round(entity.progress));
+    self.paid(Math.round(entity.paid * 100) / 100);
+    self.progress(Math.round(entity.progress * 100) / 100);
     self.permission(entity.permission);
 
     if (entity.created) {

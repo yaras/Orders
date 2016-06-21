@@ -58,7 +58,7 @@ function OrderPositionViewModel() {
     self.onSave = onSave;
 
     self.meal(position.meal());
-    self.cost(position.cost());
+    self.cost(position.cost().toString().replace('.', ','));
 
     $('#orderPositionDialog').modal('show');
   };
