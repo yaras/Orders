@@ -54,6 +54,8 @@ class PositionsController extends AppController
       $data = array_merge($data, $additionalData);
       $this->Positions->patchEntity($pos, $additionalData);
 
+      $pos['cost'] = str_replace(',', '.', $pos['cost']);
+
       $result = $this->Positions->save($pos);
 
       $orders = TableRegistry::get('Orders');
@@ -160,6 +162,8 @@ class PositionsController extends AppController
       $this->Positions->patchEntity($position, $this->request->data, [
         'fieldList' => ['meal', 'cost']
       ]);
+
+      $position['cost'] = str_replace(',', '.', $position['cost']);
 
       $result = $this->Positions->save($position);
 

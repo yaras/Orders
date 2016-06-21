@@ -41,7 +41,7 @@ class OrdersController extends AppController
     foreach($ordersArray as $o) {
       if (array_key_exists($o['id'], $sums))
       {
-        $o['cost'] = $sums[$o['id']];
+        $o['cost'] = round($sums[$o['id']], 2);
       }
       else
       {
@@ -51,7 +51,7 @@ class OrdersController extends AppController
       if (array_key_exists($o['id'], $paid))
       {
         $o['paid'] = $paid[$o['id']];
-        $o['progress'] = 100 * $paid[$o['id']] / $sums[$o['id']];
+        $o['progress'] = round(100 * $paid[$o['id']] / $sums[$o['id']], 2);
       }
       else {
         $o['paid'] = 0;
@@ -78,7 +78,7 @@ class OrdersController extends AppController
 
     if (array_key_exists($id, $sums))
     {
-      $order['cost'] = $sums[$id];
+      $order['cost'] = round($sums[$id], 2);
     }
     else
     {
@@ -88,7 +88,7 @@ class OrdersController extends AppController
     if (array_key_exists($id, $paid))
     {
       $order['paid'] = $paid[$id];
-      $order['progress'] = 100 * $paid[$id] / $sums[$id];
+      $order['progress'] = round(100 * $paid[$id] / $sums[$id], 2);
     }
     else {
       $order['paid'] = 0;
